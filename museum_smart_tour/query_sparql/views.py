@@ -111,7 +111,7 @@ def artwork_search(input_string):
     umt:hasArtistImage ?artistImageUrl.
     FILTER regex(?title,""" +'"'+input_string+'")'+ """
     }
-    LIMIT 1
+    LIMIT 30000
     """)
 
     sparql.setReturnFormat(JSON)
@@ -128,15 +128,19 @@ def artwork_search(input_string):
             artworkId.append(r['artworkID']['value'])
             productionYear.append(r['productionYear']['value'])
             nationality.append(r['nationality']['value'])
-            site.append(r['site']['value'])
-            room.append(r['room']['value'])
+            site.append(r["site"]['value'])
+            room.append(r["room"]['value'])
             museumName.append(r['museumName']['value'])
             lifePeriod.append(r["lifePeriod"]["value"])
             artistDesc.append(r['artistDesc']['value'])
-            artistImage.append(r['artistImageUrl']['value'])
+            artistImage.append(r["artistImageUrl"]['value'])
             medium.append(r['medium']['value'])
         except:
             pass
+    
+    for i in range(0, len(artistImage)):
+        artistImage[i] = artistImage[i][:4] + ':' + artistImage[i][4:]
+        artworkImage[i] = artworkImage[i][:4] + ':' + artworkImage[i][4:]
     
     return artistName, artworkTitle, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
     

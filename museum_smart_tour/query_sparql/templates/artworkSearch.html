@@ -5,9 +5,9 @@
 <head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
+<link rel="stylesheet" href="{% static 'css/style2.css' %}">
 </head>
-<body onload="javascript:AddData()">
+<body style="color:black" onload="javascript:AddData()">
 
 <a href="../"><h1 style="text-align:center; color:blue">Smart Tour</h1></a>
 <h2 style="text-align:center; color:blue">You are searching for {{input_string}}</h1>
@@ -16,12 +16,12 @@
         <thead>
             <tr>
                 <td>ArtWork Title</td>
-                <td>ArtWork Width</td>
                 <td>ArtWork Images</td>
-                <td>Artist FirstName</td>
-                <td>Artist LastName</td>
-                <td>Artist Public Caption</td>
-                <td>Artist Image</td>
+                <td>Artist Name</td>
+                <td>Museum Name</td>
+                <td>Life Period</td>
+                <td>Room</td>
+                <td>Site</td>
             </tr>
         </thead>
 
@@ -35,6 +35,7 @@
  <script>
 
 function AddData(){
+    console.log()
     var artwork_title={{artworkTitle|safe}}
     var artist_name={{artistName|safe}}
     var artwork_width={{artworkWidth|safe}}
@@ -49,7 +50,6 @@ function AddData(){
     var artist_desc={{artistDesc|safe}}
     var artist_image={{artistImage|safe}}
     var med = {{medium|safe}}
-    var in_string = {{input_string|safe}}
 
     for(let i=0; i< artwork_image.length;i++)
     {
@@ -64,10 +64,13 @@ function AddData(){
         var width = artwork_width[i];
         var title = artwork_title[i];
         var artist = artist_name[i];
-        var m_name = museum_mane[i];
-        var med = medium[i];
+        var m_name = museum_name[i];
+        var me = med[i];
+        var lp = life_period[i];
+        var roo = rm[i];
+        var sit = st[i];
 
-        rows += "<tr><td>" +title + "</td><td>"+ width +"</td><td><a href='"+img.src+"' target='_blank'> <img src='" +img.src+ "' width='200' height='200'></a></td><td>"  + artist + "</td><td>" + m_name + "</td><td><a href='"+img1.src+"' target='_blank'> <img src='" +img1.src+ "' width='200' height='200'></a></td></tr>";
+        rows += "<tr><td>" +title +"</td><td><a href='"+img.src+"' target='_blank'> <img src='" +img.src+ "' width='200' height='200'></a></td><td>"  + artist + "</td><td>" + m_name + "</td><td>"+ lp +"</td><td>"+ roo + "</td><td>" + sit +"</td></tr>";
         $(rows).appendTo("#list tbody");
     }
 } 
