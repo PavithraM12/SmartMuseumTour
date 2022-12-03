@@ -122,6 +122,7 @@ def artwork_search(input_string):
     for r in res_1:
         try:
             artistName.append(r['artistName']['value'])
+            artworkTitle.append(r["title"]["value"])
             artworkWidth.append(r['width']['value'])
             artworkImage.append(r['imageUrl']['value'])
             artworkId.append(r['artworkID']['value'])
@@ -137,7 +138,7 @@ def artwork_search(input_string):
         except:
             pass
     
-    return artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
+    return artistName, artworkTitle, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
     
 @csrf_exempt 
 def searchByName(request):
@@ -146,6 +147,6 @@ def searchByName(request):
         input_string=request.POST['fname']
         # print(input_string)
 
-    artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  = artwork_search(input_string)
-    print(artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  )
-    return render(request, 'artworkSearch.html', {'artistName': artistName, 'artworkWidth' : artworkWidth, 'artworkImage' : artworkImage, 'artworkId' : artworkId, 'productionYear' : productionYear, 'nationality' : nationality, 'site' : site, 'room' : room, 'museumName' : museumName, 'lifePeriod' : lifePeriod, 'artistDesc' : artistDesc, 'artistImage' : artistImage, 'medium' : medium, 'keystring':input_string})
+    artistName, artworkTitle, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  = artwork_search(input_string)
+    print(artistName, artworkTitle, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  )
+    return render(request, 'artworkSearch.html', {'artistName': artistName, 'artworkTitle' : artworkTitle, 'artworkWidth' : artworkWidth, 'artworkImage' : artworkImage, 'artworkId' : artworkId, 'productionYear' : productionYear, 'nationality' : nationality, 'site' : site, 'room' : room, 'museumName' : museumName, 'lifePeriod' : lifePeriod, 'artistDesc' : artistDesc, 'artistImage' : artistImage, 'medium' : medium, 'keystring':input_string})
