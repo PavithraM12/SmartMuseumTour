@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from SPARQLWrapper import SPARQLWrapper, RDFXML
+from SPARQLWrapper.Wrapper import JSON
 from rdflib import Graph
 from django.views.decorators.csrf import csrf_exempt
 import cv2
-from django.views.decorators.csrf import csrf_exempt
 
 def main_html(request):
     return render(request, "main.html")
@@ -76,7 +76,7 @@ def artwork_search(input_string):
     artistDesc=[]
     artistImage=[]
     medium=[]
-    sparql = SPARQLWrapper("http://ec2-35-90-181-153.us-west-2.compute.amazonaws.com:3030/#/dataset/tour/query")
+    sparql = SPARQLWrapper("http://ec2-35-90-181-153.us-west-2.compute.amazonaws.com:3030/tour/sparql")
 
     sparql.setQuery("""
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -138,11 +138,12 @@ def artwork_search(input_string):
     
     return artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
     
-    @csrf_exempt 
-    def searchByName(request):
-        input_string=""
-        if(request.method=='POST'):
-            input_string=request.POST['fname']
-    
-        artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  = artwork_search(keyString)
-        return render(request, 'artworkSearch.html', {'artistName': artistName, 'artworkWidth' : artworkWidth, 'artworkImage' : artworkImage, 'artworkId' : artworkId, 'productionYear' : productionYear, 'nationality' : nationality, 'site' : site, 'room' : room, 'museumName' : museumName, 'lifePeriod' : lifePeriod, 'artistDesc' : artistDesc, 'artistImage' : artistImage, 'medium' : medium, 'keystring':keyString})
+@csrf_exempt 
+def searchByName(request):
+    input_string=""
+    if(request.method=='POST'):
+        input_string=request.POST['fname']
+        # print(input_string)
+
+    artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  = artwork_search(input_string)
+    return render(request, 'artworkSearch.html', {'artistName': artistName, 'artworkWidth' : artworkWidth, 'artworkImage' : artworkImage, 'artworkId' : artworkId, 'productionYear' : productionYear, 'nationality' : nationality, 'site' : site, 'room' : room, 'museumName' : museumName, 'lifePeriod' : lifePeriod, 'artistDesc' : artistDesc, 'artistImage' : artistImage, 'medium' : medium, 'keystring':input_string})
