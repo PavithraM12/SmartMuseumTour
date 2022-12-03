@@ -121,7 +121,6 @@ def artwork_search(input_string):
     for r in res_1:
         try:
             artistName.append(r['artistName']['value'])
-            artworkTitle.append(r['title']['value'])
             artworkWidth.append(r['width']['value'])
             artworkImage.append(r['artworkImage']['value'])
             artworkId.append(r['artworkId']['value'])
@@ -137,6 +136,13 @@ def artwork_search(input_string):
         except:
             pass
     
-    return artistName, artworkTitle, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
+    return artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
     
+    @csrf_exempt 
+    def searchByName(request):
+        input_string=""
+        if(request.method=='POST'):
+            input_string=request.POST['fname']
     
+        artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  = artwork_search(keyString)
+        return render(request, 'artworkSearch.html', {'artistName': artistName, 'artworkWidth' : artworkWidth, 'artworkImage' : artworkImage, 'artworkId' : artworkId, 'productionYear' : productionYear, 'nationality' : nationality, 'site' : site, 'room' : room, 'museumName' : museumName, 'lifePeriod' : lifePeriod, 'artistDesc' : artistDesc, 'artistImage' : artistImage, 'medium' : medium, 'keystring':keyString})
