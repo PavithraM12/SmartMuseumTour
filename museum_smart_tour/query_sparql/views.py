@@ -4,12 +4,14 @@ from SPARQLWrapper import SPARQLWrapper, RDFXML
 from rdflib import Graph
 from django.views.decorators.csrf import csrf_exempt
 import cv2
+from django.views.decorators.csrf import csrf_exempt
 
 def main_html(request):
     return render(request, "main.html")
     # return HttpResponse("Hello, world. You're at the polls index.")
 
-def open_camera():
+@csrf_exempt
+def open_camera(request):
     import cv2
 
     cam = cv2.VideoCapture(0)
@@ -43,7 +45,7 @@ def open_camera():
     
     cv2.destroyAllWindows()
 
-
+@csrf_exempt
 def scan_qrcode(filename):
     print("A")
     try:
