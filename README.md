@@ -26,5 +26,6 @@ SPARQL
 **UI SetUp:
 1, Open the URI:http://127.0.0.1:8000/ , to get to the main page
 2, You can either search by title or scan the QR of the title. (Inorder to exceute this step EC2 fuseki server must be up and running)
+  When you want to check with QR you need to click esc to close the camera popup.
 3, When search or QR is provided, details of the artifact will be rendered in next HTML page.
 **
