@@ -87,6 +87,7 @@ def artwork_search(input_string):
     SELECT ?artistName ?title ?artworkID ?productionYear ?dimensions ?description ?classification ?imageUrl ?width ?height ?nationality ?site ?room ?museumName ?lifePeriod ?artistDesc ?artistImageUrl ?medium 
     WHERE {
     ?art rdf:type umt:Artifact;
+    umt:hasTitle ?title;
     umt:isCreatedBy ?art2;
     umt:hasMedium ?medium;
     umt:hasDate ?productionYear;
@@ -122,16 +123,16 @@ def artwork_search(input_string):
         try:
             artistName.append(r['artistName']['value'])
             artworkWidth.append(r['width']['value'])
-            artworkImage.append(r['artworkImage']['value'])
-            artworkId.append(r['artworkId']['value'])
+            artworkImage.append(r['imageUrl']['value'])
+            artworkId.append(r['artworkID']['value'])
             productionYear.append(r['productionYear']['value'])
             nationality.append(r['nationality']['value'])
             site.append(r['site']['value'])
             room.append(r['room']['value'])
             museumName.append(r['museumName']['value'])
-            lifePeriod.append(r['lifePeriod']['value'])
+            lifePeriod.append(r["lifePeriod"]["value"])
             artistDesc.append(r['artistDesc']['value'])
-            artistImage.append(r['artistImage']['value'])
+            artistImage.append(r['artistImageUrl']['value'])
             medium.append(r['medium']['value'])
         except:
             pass
@@ -146,4 +147,5 @@ def searchByName(request):
         # print(input_string)
 
     artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  = artwork_search(input_string)
+    print(artistName, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium  )
     return render(request, 'artworkSearch.html', {'artistName': artistName, 'artworkWidth' : artworkWidth, 'artworkImage' : artworkImage, 'artworkId' : artworkId, 'productionYear' : productionYear, 'nationality' : nationality, 'site' : site, 'room' : room, 'museumName' : museumName, 'lifePeriod' : lifePeriod, 'artistDesc' : artistDesc, 'artistImage' : artistImage, 'medium' : medium, 'keystring':input_string})
