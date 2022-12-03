@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from SPARQLWrapper import SPARQLWrapper, RDFXML
+from rdflib import Graph
+from django.views.decorators.csrf import csrf_exempt
 import cv2
 
 def main_html(request):
@@ -54,3 +57,84 @@ def scan_qrcode(filename):
         return
 
 # open_camera()
+
+def artwork_search(input_string):
+    artworkImage=[]
+    artworkTitle=[]
+    artworkWidth=[]
+    artworkHeight=[]
+    artworkId=[]
+    artistName=[]
+    productionYear=[]
+    nationality=[]
+    site=[]
+    room=[]
+    museumName=[]
+    lifePeriod=[]
+    artistDesc=[]
+    artistImage=[]
+    medium=[]
+    sparql = SPARQLWrapper("http://ec2-35-90-181-153.us-west-2.compute.amazonaws.com:3030/#/dataset/tour/query")
+
+    sparql.setQuery("""
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX umt: <http://www.semanticweb.org/artifact#>
+    SELECT ?artistName ?title ?artworkID ?productionYear ?dimensions ?description ?classification ?imageUrl ?width ?height ?nationality ?site ?room ?museumName ?lifePeriod ?artistDesc ?artistImageUrl ?medium 
+    WHERE {
+    ?art rdf:type umt:Artifact;
+    umt:isCreatedBy ?art2;
+    umt:hasMedium ?medium;
+    umt:hasDate ?productionYear;
+    umt:hasArtifactID ?artworkID;
+    umt:hasDimensions ?dimensions;
+    umt:hasDescription ?description;
+    umt:hasClassification ?classification;
+    umt:hasImage ?imageUrl;
+    umt:hasHeight ?height;
+    umt:hasWidth ?width;
+    umt:hasSite ?site;
+    umt:hasRoom ?room;
+    umt:hasMuseumName ?museumName.
+ 
+  
+    ?art2 rdf:type umt:Artist;
+    umt:hasArtistName ?artistName;
+    umt:hasNationality ?nationality;
+    umt:hasLifeperiod ?lifePeriod;
+    umt:hasArtistDescr ?artistDesc;
+    umt:hasArtistImage ?artistImageUrl.
+    FILTER regex(?title,""" +'"'+input_string+'")'+ """
+    }
+    LIMIT 1
+    """)
+
+    sparql.setReturnFormat(JSON)
+    res = sparql.query().convert()
+
+    res_1=res['results']['bindings']
+
+    for r in res_1:
+        try:
+            artistName.append(r['artistName']['value'])
+            artworkTitle.append(r['title']['value'])
+            artworkWidth.append(r['width']['value'])
+            artworkImage.append(r['artworkImage']['value'])
+            artworkId.append(r['artworkId']['value'])
+            productionYear.append(r['productionYear']['value'])
+            nationality.append(r['nationality']['value'])
+            site.append(r['site']['value'])
+            room.append(r['room']['value'])
+            museumName.append(r['museumName']['value'])
+            lifePeriod.append(r['lifePeriod']['value'])
+            artistDesc.append(r['artistDesc']['value'])
+            artistImage.append(r['artistImage']['value'])
+            medium.append(r['medium']['value'])
+        except:
+            pass
+    
+    return artistName, artworkTitle, artworkWidth, artworkImage, artworkId, productionYear, nationality, site, room, museumName, lifePeriod, artistDesc, artistImage, medium 
+    
+    
